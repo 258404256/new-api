@@ -7,7 +7,7 @@ const Token = () => (
       <Layout.Header>
         <Banner
           type='warning'
-          description='令牌无法精确控制使用额度，请勿直接将令牌分发给用户。'
+          description='令牌无法精确控制使用额度，请勿直接将令牌分发给用户。api地址:【https://api.bigaipro.com/】或【https://api.bigaipro.com/v1】'
         />
       </Layout.Header>
       <Layout.Content>

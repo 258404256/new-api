@@ -18,27 +18,27 @@ const Footer = () => {
   const defaultFooter = (
     <div className='custom-footer'>
       <a
-        href='https://github.com/Calcium-Ion/new-api'
+        href='https://api.bigaipro.com'
         target='_blank'
         rel='noreferrer'
       >
-        New API {import.meta.env.VITE_REACT_APP_VERSION}{' '}
+        BigAiPro API {import.meta.env.VITE_REACT_APP_VERSION}{' '}
       </a>
       由{' '}
       <a
-        href='https://github.com/Calcium-Ion'
+        href='https://macfun.org'
         target='_blank'
         rel='noreferrer'
       >
-        Calcium-Ion
+        MacFun
       </a>{' '}
       开发，基于{' '}
       <a
-        href='https://github.com/songquanpeng/one-api'
+        href='https://macfun.org/archives/category/rengongzhineng/bigai-topic'
         target='_blank'
         rel='noreferrer'
       >
-        One API
+        New API
       </a>
     </div>
   );
