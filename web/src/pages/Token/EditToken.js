@@ -442,27 +442,6 @@ const EditToken = (props) => {
           <div style={{ marginTop: 10 }}>
             <Typography.Text>令牌分组，默认为用户的分组</Typography.Text>
           </div>
-          {groups.length > 0 ?
-            <Select
-              style={{ marginTop: 8 }}
-              placeholder={'令牌分组，默认为用户的分组'}
-              name='gruop'
-              required
-              selection
-              onChange={(value) => {
-                handleInputChange('group', value);
-              }}
-              value={inputs.group}
-              autoComplete='new-password'
-              optionList={groups}
-            />:
-            <Select
-              style={{ marginTop: 8 }}
-              placeholder={'管理员未设置用户可选分组'}
-              name='gruop'
-              disabled={true}
-            />
-          }
         </Spin>
       </SideSheet>
     </>
