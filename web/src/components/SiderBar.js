@@ -74,12 +74,12 @@ const SiderBar = () => {
       //   to: '/',
       //   icon: <IconHome />,
       // },
-      {
-        text: 'Playground',
-        itemKey: 'playground',
-        to: '/playground',
-        icon: <IconCommentStroked />,
-      },
+      // {
+      //   text: 'Playground',
+      //   itemKey: 'playground',
+      //   to: '/playground',
+      //   icon: <IconCommentStroked />,
+      // },
       {
         text: '模型价格',
         itemKey: 'pricing',
