@@ -12,6 +12,8 @@ import {
   IconHelpCircle,
   IconHome,
   IconHomeStroked,
+  IconComment,
+  IconCommentStroked,
   IconKey,
   IconNoteMoneyStroked,
   IconPriceTag,
@@ -36,8 +38,47 @@ let buttons = [
     text: '首页',
     itemKey: 'home',
     to: '/',
-    // icon: <IconHomeStroked />,
+    icon: <IconHomeStroked />,
+    onMouseEnter: (e) => {
+      e.currentTarget.querySelector('svg').style.color = '#0064FA';
+    },
+    onMouseLeave: (e) => {
+      e.currentTarget.querySelector('svg').style.color = 'black';
+    },
   },
+  {
+    text: '点我聊天',
+    itemKey: 'chat',
+    to: '/chat',
+    icon: <IconComment />,
+    onMouseEnter: (e) => {
+      e.currentTarget.querySelector('svg').style.color = '#0064FA';
+    },
+    onMouseLeave: (e) => {
+      e.currentTarget.querySelector('svg').style.color = 'black';
+    },
+    className: localStorage.getItem('chat_link') && !isMobile() //移动端不显示
+        ? 'semi-navigation-item-normal'
+        : 'tableHiddle',
+  },
+  // chat2link 暂时先不加
+  {
+    text: '新窗口聊天',
+    itemKey: 'chat2link',
+    to: '/chat2link',
+    // icon: <IconComment style={{ color: '#9C27B0' }} size="extra-large"/>,
+    icon: <IconCommentStroked />,
+    onMouseEnter: (e) => {
+      e.currentTarget.querySelector('svg').style.color = '#0064FA';
+    },
+    onMouseLeave: (e) => {
+      e.currentTarget.querySelector('svg').style.color = 'black';
+    },
+    className: localStorage.getItem('chat_link') && !isMobile() //移动端不显示
+        ? 'semi-navigation-item-normal'
+        : 'tableHiddle',
+  },
+
   // {
   //   text: 'Playground',
   //   itemKey: 'playground',
@@ -46,13 +87,14 @@ let buttons = [
   // },
 ];
 
-if (localStorage.getItem('chat_link')) {
-  headerButtons.splice(1, 0, {
-    name: '聊天',
-    to: '/chat',
-    icon: 'comments',
-  });
-}
+// if (localStorage.getItem('chat_link')) {
+//   headerButtons.splice(1, 0, {
+//     name: '聊天',
+//     to: '/chat',
+//     // icon: 'comments',
+//     icon: <IconComment />,
+//   });
+// }
 
 const HeaderBar = () => {
   const [userState, userDispatch] = useContext(UserContext);
@@ -64,10 +106,10 @@ const HeaderBar = () => {
   const currentDate = new Date();
   // enable fireworks on new year(1.1 and 2.9-2.24)
   const isNewYear =
-    (currentDate.getMonth() === 0 && currentDate.getDate() === 1) ||
-    (currentDate.getMonth() === 1 &&
-      currentDate.getDate() >= 9 &&
-      currentDate.getDate() <= 24);
+      (currentDate.getMonth() === 0 && currentDate.getDate() === 1) ||
+      (currentDate.getMonth() === 1 &&
+          currentDate.getDate() >= 9 &&
+          currentDate.getDate() <= 24);
 
   async function logout() {
     setShowSidebar(false);
@@ -95,122 +137,134 @@ const HeaderBar = () => {
   useEffect(() => {
     if (theme === 'dark') {
       document.body.setAttribute('theme-mode', 'dark');
+    } else {
+      document.body.removeAttribute('theme-mode');
+    }
+
+    // 发送当前主题模式给子页面
+    const iframe = document.querySelector('iframe');
+    if (iframe) {
+      iframe.contentWindow.postMessage({ themeMode: theme }, '*');
     }
 
     if (isNewYear) {
       console.log('Happy New Year!');
     }
-  }, []);
+  }, [theme]); // 监听 theme-mode 的变化
 
   return (
-    <>
-      <Layout>
-        <div style={{ width: '100%' }}>
-          <Nav
-            mode={'horizontal'}
-            // bodyStyle={{ height: 100 }}
-            renderWrapper={({ itemElement, isSubNav, isInSubNav, props }) => {
-              const routerMap = {
-                about: '/about',
-                login: '/login',
-                register: '/register',
-                home: '/',
-              };
-              return (
-                <Link
-                  style={{ textDecoration: 'none' }}
-                  to={routerMap[props.itemKey]}
-                >
-                  {itemElement}
-                </Link>
-              );
-            }}
-            selectedKeys={[]}
-            // items={headerButtons}
-            onSelect={(key) => {}}
-            header={isMobile()?{
-              logo: (
-                <img src={logo} alt='logo' style={{ marginRight: '0.75em' }} />
-              ),
-            }:{
-              logo: (
-                <img src={logo} alt='logo' />
-              ),
-              text: systemName,
-
-            }}
-            items={buttons}
-            footer={
-              <>
-                {isNewYear && (
-                  // happy new year
-                  <Dropdown
-                    position='bottomRight'
-                    render={
-                      <Dropdown.Menu>
-                        <Dropdown.Item onClick={handleNewYearClick}>
-                          Happy New Year!!!
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    }
-                  >
-                    <Nav.Item itemKey={'new-year'} text={'🏮'} />
-                  </Dropdown>
-                )}
-                <Nav.Item itemKey={'about'} icon={<IconHelpCircle />} />
-                <>
-                {!isMobile() && (
-                    <Switch
-                      checkedText='🌞'
-                      size={'large'}
-                      checked={theme === 'dark'}
-                      uncheckedText='🌙'
-                      onChange={(checked) => {
-                        setTheme(checked);
-                      }}
-                    />
-                  )}
-                </>
-                {userState.user ? (
-                  <>
-                    <Dropdown
-                      position='bottomRight'
-                      render={
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={logout}>退出</Dropdown.Item>
-                        </Dropdown.Menu>
-                      }
-                    >
-                      <Avatar
-                        size='small'
-                        color={stringToColor(userState.user.username)}
-                        style={{ margin: 4 }}
+      <>
+        <Layout>
+          <div style={{ width: '100%' }}>
+            <Nav
+                mode={'horizontal'}
+                // bodyStyle={{ height: 100 }}
+                renderWrapper={({ itemElement, isSubNav, isInSubNav, props }) => {
+                  const routerMap = {
+                    about: '/about',
+                    login: '/login',
+                    register: '/register',
+                    home: '/',
+                    chat2link: 'chat2link',
+                    chat: '/chat',
+                  };
+                  return (
+                      <Link
+                          style={{ textDecoration: 'none' }}
+                          to={routerMap[props.itemKey]}
+                          // chat2link 新标签页打开
+                          target={props.itemKey === 'chat2link' ? '_blank' : undefined}
                       >
-                        {userState.user.username[0]}
-                      </Avatar>
-                      <span>{userState.user.username}</span>
-                    </Dropdown>
-                  </>
-                ) : (
+                        {itemElement}
+                      </Link>
+                  );
+                }}
+                selectedKeys={[]}
+                // items={headerButtons}
+                onSelect={(key) => {}}
+                header={isMobile()?{
+                  logo: (
+                      <img src={logo} alt='logo' style={{ marginRight: '0.75em' }} />
+                  ),
+                }:{
+                  logo: (
+                      <img src={logo} alt='logo' />
+                  ),
+                  text: systemName,
+
+                }}
+                items={buttons}
+                footer={
                   <>
-                    <Nav.Item
-                      itemKey={'login'}
-                      text={'登录'}
-                      // icon={<IconKey />}
-                    />
-                    <Nav.Item
-                      itemKey={'register'}
-                      text={'注册'}
-                      icon={<IconUser />}
-                    />
+                    {isNewYear && (
+                        // happy new year
+                        <Dropdown
+                            position='bottomRight'
+                            render={
+                              <Dropdown.Menu>
+                                <Dropdown.Item onClick={handleNewYearClick}>
+                                  Happy New Year!!!
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            }
+                        >
+                          <Nav.Item itemKey={'new-year'} text={'🏮'} />
+                        </Dropdown>
+                    )}
+                    <Nav.Item itemKey={'about'} icon={<IconHelpCircle />} />
+                    <>
+                      {!isMobile() && (
+                          <Switch
+                              checkedText='🌞'
+                              size={'large'}
+                              checked={theme === 'dark'}
+                              uncheckedText='🌙'
+                              onChange={(checked) => {
+                                setTheme(checked);
+                              }}
+                          />
+                      )}
+                    </>
+                    {userState.user ? (
+                        <>
+                          <Dropdown
+                              position='bottomRight'
+                              render={
+                                <Dropdown.Menu>
+                                  <Dropdown.Item onClick={logout}>退出</Dropdown.Item>
+                                </Dropdown.Menu>
+                              }
+                          >
+                            <Avatar
+                                size='small'
+                                color={stringToColor(userState.user.username)}
+                                style={{ margin: 4 }}
+                            >
+                              {userState.user.username[0]}
+                            </Avatar>
+                            <span>{userState.user.username}</span>
+                          </Dropdown>
+                        </>
+                    ) : (
+                        <>
+                          <Nav.Item
+                              itemKey={'login'}
+                              text={'登录'}
+                              // icon={<IconKey />}
+                          />
+                          <Nav.Item
+                              itemKey={'register'}
+                              text={'注册'}
+                              icon={<IconUser />}
+                          />
+                        </>
+                    )}
                   </>
-                )}
-              </>
-            }
-          ></Nav>
-        </div>
-      </Layout>
-    </>
+                }
+            ></Nav>
+          </div>
+        </Layout>
+      </>
   );
 };
 
