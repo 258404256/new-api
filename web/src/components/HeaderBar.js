@@ -45,6 +45,9 @@ let buttons = [
     onMouseLeave: (e) => {
       e.currentTarget.querySelector('svg').style.color = 'black';
     },
+    onClick: () => {
+      window.location.href = 'https://bigaipro.com'; // 点击时跳转到指定的外部链接
+    },
   },
   {
     text: '点我聊天',
@@ -62,22 +65,22 @@ let buttons = [
         : 'tableHiddle',
   },
   // chat2link 暂时先不加
-  {
-    text: '新窗口聊天',
-    itemKey: 'chat2link',
-    to: '/chat2link',
-    // icon: <IconComment style={{ color: '#9C27B0' }} size="extra-large"/>,
-    icon: <IconCommentStroked />,
-    onMouseEnter: (e) => {
-      e.currentTarget.querySelector('svg').style.color = '#0064FA';
-    },
-    onMouseLeave: (e) => {
-      e.currentTarget.querySelector('svg').style.color = 'black';
-    },
-    className: localStorage.getItem('chat_link') && !isMobile() //移动端不显示
-        ? 'semi-navigation-item-normal'
-        : 'tableHiddle',
-  },
+  // {
+  //   text: '新窗口聊天',
+  //   itemKey: 'chat2link',
+  //   to: '/chat2link',
+  //   // icon: <IconComment style={{ color: '#9C27B0' }} size="extra-large"/>,
+  //   icon: <IconCommentStroked />,
+  //   onMouseEnter: (e) => {
+  //     e.currentTarget.querySelector('svg').style.color = '#0064FA';
+  //   },
+  //   onMouseLeave: (e) => {
+  //     e.currentTarget.querySelector('svg').style.color = 'black';
+  //   },
+  //   className: localStorage.getItem('chat_link') && !isMobile() //移动端不显示
+  //       ? 'semi-navigation-item-normal'
+  //       : 'tableHiddle',
+  // },
 
   // {
   //   text: 'Playground',
@@ -161,7 +164,7 @@ const HeaderBar = () => {
                 // bodyStyle={{ height: 100 }}
                 renderWrapper={({ itemElement, isSubNav, isInSubNav, props }) => {
                   const routerMap = {
-                    about: '/about',
+                    document: '/about',
                     login: '/login',
                     register: '/register',
                     home: '/',
@@ -211,7 +214,8 @@ const HeaderBar = () => {
                           <Nav.Item itemKey={'new-year'} text={'🏮'} />
                         </Dropdown>
                     )}
-                    <Nav.Item itemKey={'about'} icon={<IconHelpCircle />} />
+                    <Nav.Item itemKey={'home'} text={'公告'} icon={<IconHelpCircle />} />
+                    <Nav.Item itemKey={'document'} text={'文档'} icon={<IconCommentStroked />} />
                     <>
                       {!isMobile() && (
                           <Switch

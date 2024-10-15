@@ -72,18 +72,12 @@ const SiderBar = () => {
       //   to: '/',
       //   icon: <IconHome />,
       // },
-      // {
-      //   text: 'Playground',
-      //   itemKey: 'playground',
-      //   to: '/playground',
-      //   icon: <IconCommentStroked />,
-      // },
-      // {
-      //   text: 'Playground',
-      //   itemKey: 'playground',
-      //   to: '/playground',
-      //   icon: <IconCommentStroked />,
-      // },
+      {
+        text: 'Playground',
+        itemKey: 'playground',
+        to: '/playground',
+        icon: <IconCommentStroked />,
+      },
       {
         text: '模型价格',
         itemKey: 'pricing',
@@ -103,12 +97,9 @@ const SiderBar = () => {
         // to: '/chat',
         items: chatItems,
         icon: <IconComment />,
-        // className:  isMobile() && localStorage.getItem('chat_link')
-        //   ? 'semi-navigation-item-normal'
-        //   : 'tableHiddle',
-        // className: localStorage.getItem('chat_link')
-        //   ? 'semi-navigation-item-normal'
-        //   : 'tableHiddle',
+        className:  isMobile() && localStorage.getItem('chat_link')
+          ? 'semi-navigation-item-normal'
+          : 'tableHiddle',
       },
       {
         text: '令牌',
